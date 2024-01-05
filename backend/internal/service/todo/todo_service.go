@@ -36,25 +36,32 @@ func (t *todoService) CreateTodo(ctx context.Context, arg *model.TodoInput) (*mo
 		fileDirName string      = "images"
 		filePerm    fs.FileMode = 0o666
 	)
-
-	// 画像の保存処理
-	file, err := io.ReadAll(arg.Image.File)
-	if err != nil {
-		return nil, err
+	var (
+		image string
+		err   error
+	)
+	// 画像があったら画像の保存処理
+	if arg.Image != nil {
+		file, err := io.ReadAll(arg.Image.File)
+		if err != nil {
+			return nil, err
+		}
+		filePath := path.Join(fileDirName, arg.Image.Filename)
+		if _, err := os.Create(filePath); err != nil {
+			return nil, err
+		}
+		if err := os.WriteFile(filePath, file, filePerm); err != nil {
+			return nil, err
+		}
+		pwd, err := os.Getwd()
+		if err != nil {
+			return nil, err
+		}
+		image = path.Join(pwd, filePath)
+	} else {
+		image = ""
 	}
 
-	filePath := path.Join(fileDirName, arg.Image.Filename)
-	if _, err := os.Create(filePath); err != nil {
-		return nil, err
-	}
-	if err := os.WriteFile(filePath, file, filePerm); err != nil {
-		return nil, err
-	}
-	pwd, err := os.Getwd()
-	if err != nil {
-		return nil, err
-	}
-	image := path.Join(pwd, filePath)
 	err = t.repo.Create(&models.Todo{
 		Title:       arg.Title,
 		Description: *arg.Description,
