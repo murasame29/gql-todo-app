@@ -7,13 +7,21 @@ package graph
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/murasame29/gql-todo-app/internal/graph/model"
 )
 
 // CreateTodo is the resolver for the createTodo field.
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.TodoInput) (*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: CreateTodo - createTodo"))
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	res, err := r.todo.CreateTodo(ctx, &input)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
 
 // UpdateTodo is the resolver for the updateTodo field.
