@@ -28,3 +28,10 @@ type TodoInput struct {
 	Description *string         `json:"description,omitempty"`
 	Image       *graphql.Upload `json:"image,omitempty"`
 }
+
+type TodoUpdateInput struct {
+	Title       string          `json:"title"`
+	Description *string         `json:"description,omitempty"`
+	Image       *graphql.Upload `json:"image,omitempty"`
+	IsSolved    *bool           `json:"is_solved,omitempty"`
+}

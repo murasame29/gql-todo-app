@@ -17,6 +17,13 @@ input TodoInput {
   image: Upload
 }
 
+input TodoUpdateInput {
+  title: String!
+  description: String
+  image: Upload
+  is_solved: Boolean
+}
+
 type Query {
   getTodos(solved: Boolean, page_size: Int, page_id: Int): [Todo]
   getTodoById(todo_id: Int!): Todo
@@ -24,6 +31,6 @@ type Query {
 
 type Mutation {
   createTodo(input: TodoInput!): Todo
-  updateTodo(todo_id: Int!, input: TodoInput!): Todo
+  updateTodo(todo_id: Int!, input: TodoUpdateInput!): Todo
   deleteTodo(todo_id: Int!): Todo
 }

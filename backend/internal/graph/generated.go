@@ -49,7 +49,7 @@ type ComplexityRoot struct {
 	Mutation struct {
 		CreateTodo func(childComplexity int, input model.TodoInput) int
 		DeleteTodo func(childComplexity int, todoID int) int
-		UpdateTodo func(childComplexity int, todoID int, input model.TodoInput) int
+		UpdateTodo func(childComplexity int, todoID int, input model.TodoUpdateInput) int
 	}
 
 	Query struct {
@@ -71,7 +71,7 @@ type ComplexityRoot struct {
 
 type MutationResolver interface {
 	CreateTodo(ctx context.Context, input model.TodoInput) (*model.Todo, error)
-	UpdateTodo(ctx context.Context, todoID int, input model.TodoInput) (*model.Todo, error)
+	UpdateTodo(ctx context.Context, todoID int, input model.TodoUpdateInput) (*model.Todo, error)
 	DeleteTodo(ctx context.Context, todoID int) (*model.Todo, error)
 }
 type QueryResolver interface {
@@ -132,7 +132,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateTodo(childComplexity, args["todo_id"].(int), args["input"].(model.TodoInput)), true
+		return e.complexity.Mutation.UpdateTodo(childComplexity, args["todo_id"].(int), args["input"].(model.TodoUpdateInput)), true
 
 	case "Query.getTodoById":
 		if e.complexity.Query.GetTodoByID == nil {
@@ -223,6 +223,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	ec := executionContext{rc, e, 0, 0, make(chan graphql.DeferredResult)}
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
 		ec.unmarshalInputTodoInput,
+		ec.unmarshalInputTodoUpdateInput,
 	)
 	first := true
 
@@ -339,6 +340,13 @@ input TodoInput {
   image: Upload
 }
 
+input TodoUpdateInput {
+  title: String!
+  description: String
+  image: Upload
+  is_solved: Boolean
+}
+
 type Query {
   getTodos(solved: Boolean, page_size: Int, page_id: Int): [Todo]
   getTodoById(todo_id: Int!): Todo
@@ -346,7 +354,7 @@ type Query {
 
 type Mutation {
   createTodo(input: TodoInput!): Todo
-  updateTodo(todo_id: Int!, input: TodoInput!): Todo
+  updateTodo(todo_id: Int!, input: TodoUpdateInput!): Todo
   deleteTodo(todo_id: Int!): Todo
 }
 `, BuiltIn: false},
@@ -399,10 +407,10 @@ func (ec *executionContext) field_Mutation_updateTodo_args(ctx context.Context, 
 		}
 	}
 	args["todo_id"] = arg0
-	var arg1 model.TodoInput
+	var arg1 model.TodoUpdateInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalNTodoInput2githubᚗcomᚋmurasame29ᚋgqlᚑtodoᚑappᚋinternalᚋgraphᚋmodelᚐTodoInput(ctx, tmp)
+		arg1, err = ec.unmarshalNTodoUpdateInput2githubᚗcomᚋmurasame29ᚋgqlᚑtodoᚑappᚋinternalᚋgraphᚋmodelᚐTodoUpdateInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -596,7 +604,7 @@ func (ec *executionContext) _Mutation_updateTodo(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateTodo(rctx, fc.Args["todo_id"].(int), fc.Args["input"].(model.TodoInput))
+		return ec.resolvers.Mutation().UpdateTodo(rctx, fc.Args["todo_id"].(int), fc.Args["input"].(model.TodoUpdateInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3151,6 +3159,54 @@ func (ec *executionContext) unmarshalInputTodoInput(ctx context.Context, obj int
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputTodoUpdateInput(ctx context.Context, obj interface{}) (model.TodoUpdateInput, error) {
+	var it model.TodoUpdateInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"title", "description", "image", "is_solved"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "title":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Title = data
+		case "description":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Description = data
+		case "image":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("image"))
+			data, err := ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Image = data
+		case "is_solved":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("is_solved"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsSolved = data
+		}
+	}
+
+	return it, nil
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -3742,6 +3798,11 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 
 func (ec *executionContext) unmarshalNTodoInput2githubᚗcomᚋmurasame29ᚋgqlᚑtodoᚑappᚋinternalᚋgraphᚋmodelᚐTodoInput(ctx context.Context, v interface{}) (model.TodoInput, error) {
 	res, err := ec.unmarshalInputTodoInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNTodoUpdateInput2githubᚗcomᚋmurasame29ᚋgqlᚑtodoᚑappᚋinternalᚋgraphᚋmodelᚐTodoUpdateInput(ctx context.Context, v interface{}) (model.TodoUpdateInput, error) {
+	res, err := ec.unmarshalInputTodoUpdateInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
