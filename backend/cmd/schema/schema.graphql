@@ -24,6 +24,6 @@ type Query {
 
 type Mutation {
   createTodo(input: TodoInput!): Todo
-  updateTodo(todo_id: ID!, input: TodoInput!): Todo
-  deleteTodo(todo_id: ID!): Todo
+  updateTodo(todo_id: Int!, input: TodoInput!): Todo
+  deleteTodo(todo_id: Int!): Todo
 }
