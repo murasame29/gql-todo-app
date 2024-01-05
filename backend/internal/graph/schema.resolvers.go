@@ -25,12 +25,19 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input model.TodoInput
 }
 
 // UpdateTodo is the resolver for the updateTodo field.
-func (r *mutationResolver) UpdateTodo(ctx context.Context, todoID string, input model.TodoInput) (*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: UpdateTodo - updateTodo"))
+func (r *mutationResolver) UpdateTodo(ctx context.Context, todoID int, input model.TodoUpdateInput) (*model.Todo, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	res, err := r.todo.UpdateTodo(ctx, todoID, &input)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
 
 // DeleteTodo is the resolver for the deleteTodo field.
-func (r *mutationResolver) DeleteTodo(ctx context.Context, todoID string) (*model.Todo, error) {
+func (r *mutationResolver) DeleteTodo(ctx context.Context, todoID int) (*model.Todo, error) {
 	panic(fmt.Errorf("not implemented: DeleteTodo - deleteTodo"))
 }
 
