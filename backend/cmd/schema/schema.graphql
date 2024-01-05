@@ -1,0 +1,29 @@
+scalar Upload
+
+type Todo {
+  todo_id: ID!
+  title: String!
+  discription: String
+  image: Upload
+  created_at: String!
+  updated_at: String!
+  is_solved: Boolean!
+  is_deleted: Boolean!
+}
+
+input TodoInput {
+  title: String!
+  discription: String
+  image: Upload
+}
+
+type Query {
+  getTodos(solved: Boolean, page_size: Int, page_id: Int): [Todo]
+  getTodoById(todo_id: ID!): Todo
+}
+
+type Mutation {
+  createTodo(input: TodoInput!): Todo
+  updateTodo(todo_id: ID!, input: TodoInput!): Todo
+  deleteTodo(todo_id: ID!): Todo
+}

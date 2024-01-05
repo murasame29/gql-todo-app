@@ -1,0 +1,51 @@
+version: "3"
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SERVER_PORT=8080
+      - SERVER_HOST=0.0.0.0
+    depends_on:
+      - database
+    networks:
+      - gql-todo-app-network
+
+  database:
+    build: ./database
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - ./database/data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d
+    networks:
+      - gql-todo-app-network
+
+  # TODO:フロントエンドのコンテナを追加する
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+    # TODO:フロントエンドの環境変数を設定する
+      - REACT_APP_API_URL=http://localhost:8080/graphql
+    volumes:
+    # TODO:フロントエンドのコンテナにマウントする
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+    networks:
+      - gql-todo-app-network
+    depends_on:
+      - backend
+      - database
+      
+networks:
+  gql-todo-app-network:
+    external:
+      true
