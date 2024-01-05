@@ -53,7 +53,7 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		GetTodoByID func(childComplexity int, todoID string) int
+		GetTodoByID func(childComplexity int, todoID int) int
 		GetTodos    func(childComplexity int, solved *bool, pageSize *int, pageID *int) int
 	}
 
@@ -76,7 +76,7 @@ type MutationResolver interface {
 }
 type QueryResolver interface {
 	GetTodos(ctx context.Context, solved *bool, pageSize *int, pageID *int) ([]*model.Todo, error)
-	GetTodoByID(ctx context.Context, todoID string) (*model.Todo, error)
+	GetTodoByID(ctx context.Context, todoID int) (*model.Todo, error)
 }
 
 type executableSchema struct {
@@ -144,7 +144,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.GetTodoByID(childComplexity, args["todo_id"].(string)), true
+		return e.complexity.Query.GetTodoByID(childComplexity, args["todo_id"].(int)), true
 
 	case "Query.getTodos":
 		if e.complexity.Query.GetTodos == nil {
@@ -341,7 +341,7 @@ input TodoInput {
 
 type Query {
   getTodos(solved: Boolean, page_size: Int, page_id: Int): [Todo]
-  getTodoById(todo_id: ID!): Todo
+  getTodoById(todo_id: Int!): Todo
 }
 
 type Mutation {
@@ -429,10 +429,10 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 func (ec *executionContext) field_Query_getTodoById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
+	var arg0 int
 	if tmp, ok := rawArgs["todo_id"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("todo_id"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		arg0, err = ec.unmarshalNInt2int(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -806,7 +806,7 @@ func (ec *executionContext) _Query_getTodoById(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetTodoByID(rctx, fc.Args["todo_id"].(string))
+		return ec.resolvers.Query().GetTodoByID(rctx, fc.Args["todo_id"].(int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
