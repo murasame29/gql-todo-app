@@ -22,6 +22,7 @@ type TodoService interface {
 	GetTodos(ctx context.Context, solved *bool, pageSize *int, pageID *int) ([]*model.Todo, error)
 	GetTodoByID(ctx context.Context, todoID int) (*model.Todo, error)
 	UpdateTodo(ctx context.Context, todoID int, arg *model.TodoUpdateInput) (*model.Todo, error)
+	Delete(ctx context.Context, todoID int) (*model.Todo, error)
 }
 
 func NewTodoService(repo repository.Todo) TodoService {
@@ -166,5 +167,22 @@ func (t *todoService) UpdateTodo(ctx context.Context, todoID int, arg *model.Tod
 		UpdatedAt:   time.Now().String(),
 		IsSolved:    *arg.IsSolved,
 		IsDeleted:   oldTodo.IsDeleted,
+	}, err
+}
+
+func (t *todoService) Delete(ctx context.Context, todoID int) (*model.Todo, error) {
+	todo, err := t.repo.ReadA(todoID)
+	if err != nil {
+		return nil, err
+	}
+	err = t.repo.Delete(todoID)
+	return &model.Todo{
+		Title:       todo.Title,
+		Description: &todo.Description,
+		Image:       &todo.Image,
+		CreatedAt:   todo.CreatedAt.String(),
+		UpdatedAt:   todo.UpdatedAt.String(),
+		IsSolved:    todo.IsSolved,
+		IsDeleted:   true,
 	}, err
 }

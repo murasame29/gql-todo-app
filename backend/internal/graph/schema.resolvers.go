@@ -6,7 +6,6 @@ package graph
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/murasame29/gql-todo-app/internal/graph/model"
@@ -38,7 +37,14 @@ func (r *mutationResolver) UpdateTodo(ctx context.Context, todoID int, input mod
 
 // DeleteTodo is the resolver for the deleteTodo field.
 func (r *mutationResolver) DeleteTodo(ctx context.Context, todoID int) (*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: DeleteTodo - deleteTodo"))
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	res, err := r.todo.Delete(ctx, todoID)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
 
 // GetTodos is the resolver for the getTodos field.
