@@ -36,12 +36,26 @@ func (r *mutationResolver) DeleteTodo(ctx context.Context, todoID string) (*mode
 
 // GetTodos is the resolver for the getTodos field.
 func (r *queryResolver) GetTodos(ctx context.Context, solved *bool, pageSize *int, pageID *int) ([]*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: GetTodos - getTodos"))
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	res, err := r.todo.GetTodos(ctx, solved, pageSize, pageID)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
 
 // GetTodoByID is the resolver for the getTodoById field.
-func (r *queryResolver) GetTodoByID(ctx context.Context, todoID string) (*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: GetTodoByID - getTodoById"))
+func (r *queryResolver) GetTodoByID(ctx context.Context, todoID int) (*model.Todo, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	res, err := r.todo.GetTodoByID(ctx, todoID)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
 
 // Mutation returns MutationResolver implementation.

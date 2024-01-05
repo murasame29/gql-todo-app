@@ -18,6 +18,8 @@ type todoService struct {
 
 type TodoService interface {
 	CreateTodo(ctx context.Context, arg *model.TodoInput) (*model.Todo, error)
+	GetTodos(ctx context.Context, solved *bool, pageSize *int, pageID *int) ([]*model.Todo, error)
+	GetTodoByID(ctx context.Context, todoID int) (*model.Todo, error)
 }
 
 func NewTodoService(repo repository.Todo) TodoService {
@@ -86,6 +88,22 @@ func (t *todoService) GetTodos(ctx context.Context, solved *bool, pageSize *int,
 
 }
 
+func (t *todoService) GetTodoByID(ctx context.Context, todoID int) (*model.Todo, error) {
+	todo, err := t.repo.ReadA(todoID)
+	if err != nil {
+		return nil, err
+	}
+	return &model.Todo{
+		TodoID:      todo.TodoID,
+		Title:       todo.Title,
+		Description: &todo.Description,
+		Image:       &todo.Image,
+		CreatedAt:   todo.CreatedAt.String(),
+		UpdatedAt:   todo.UpdatedAt.String(),
+		IsSolved:    todo.IsSolved,
+		IsDeleted:   todo.IsDeleted,
+	}, nil
+}
 func (t *todoService) UpdateTodo() {
 
 }
