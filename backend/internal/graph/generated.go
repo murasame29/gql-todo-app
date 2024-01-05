@@ -59,7 +59,7 @@ type ComplexityRoot struct {
 
 	Todo struct {
 		CreatedAt   func(childComplexity int) int
-		Discription func(childComplexity int) int
+		Description func(childComplexity int) int
 		Image       func(childComplexity int) int
 		IsDeleted   func(childComplexity int) int
 		IsSolved    func(childComplexity int) int
@@ -165,12 +165,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Todo.CreatedAt(childComplexity), true
 
-	case "Todo.discription":
-		if e.complexity.Todo.Discription == nil {
+	case "Todo.description":
+		if e.complexity.Todo.Description == nil {
 			break
 		}
 
-		return e.complexity.Todo.Discription(childComplexity), true
+		return e.complexity.Todo.Description(childComplexity), true
 
 	case "Todo.image":
 		if e.complexity.Todo.Image == nil {
@@ -325,7 +325,7 @@ var sources = []*ast.Source{
 type Todo {
   todo_id: ID!
   title: String!
-  discription: String
+  description: String
   image: Upload
   created_at: String!
   updated_at: String!
@@ -335,7 +335,7 @@ type Todo {
 
 input TodoInput {
   title: String!
-  discription: String
+  description: String
   image: Upload
 }
 
@@ -552,8 +552,8 @@ func (ec *executionContext) fieldContext_Mutation_createTodo(ctx context.Context
 				return ec.fieldContext_Todo_todo_id(ctx, field)
 			case "title":
 				return ec.fieldContext_Todo_title(ctx, field)
-			case "discription":
-				return ec.fieldContext_Todo_discription(ctx, field)
+			case "description":
+				return ec.fieldContext_Todo_description(ctx, field)
 			case "image":
 				return ec.fieldContext_Todo_image(ctx, field)
 			case "created_at":
@@ -622,8 +622,8 @@ func (ec *executionContext) fieldContext_Mutation_updateTodo(ctx context.Context
 				return ec.fieldContext_Todo_todo_id(ctx, field)
 			case "title":
 				return ec.fieldContext_Todo_title(ctx, field)
-			case "discription":
-				return ec.fieldContext_Todo_discription(ctx, field)
+			case "description":
+				return ec.fieldContext_Todo_description(ctx, field)
 			case "image":
 				return ec.fieldContext_Todo_image(ctx, field)
 			case "created_at":
@@ -692,8 +692,8 @@ func (ec *executionContext) fieldContext_Mutation_deleteTodo(ctx context.Context
 				return ec.fieldContext_Todo_todo_id(ctx, field)
 			case "title":
 				return ec.fieldContext_Todo_title(ctx, field)
-			case "discription":
-				return ec.fieldContext_Todo_discription(ctx, field)
+			case "description":
+				return ec.fieldContext_Todo_description(ctx, field)
 			case "image":
 				return ec.fieldContext_Todo_image(ctx, field)
 			case "created_at":
@@ -762,8 +762,8 @@ func (ec *executionContext) fieldContext_Query_getTodos(ctx context.Context, fie
 				return ec.fieldContext_Todo_todo_id(ctx, field)
 			case "title":
 				return ec.fieldContext_Todo_title(ctx, field)
-			case "discription":
-				return ec.fieldContext_Todo_discription(ctx, field)
+			case "description":
+				return ec.fieldContext_Todo_description(ctx, field)
 			case "image":
 				return ec.fieldContext_Todo_image(ctx, field)
 			case "created_at":
@@ -832,8 +832,8 @@ func (ec *executionContext) fieldContext_Query_getTodoById(ctx context.Context, 
 				return ec.fieldContext_Todo_todo_id(ctx, field)
 			case "title":
 				return ec.fieldContext_Todo_title(ctx, field)
-			case "discription":
-				return ec.fieldContext_Todo_discription(ctx, field)
+			case "description":
+				return ec.fieldContext_Todo_description(ctx, field)
 			case "image":
 				return ec.fieldContext_Todo_image(ctx, field)
 			case "created_at":
@@ -1079,8 +1079,8 @@ func (ec *executionContext) fieldContext_Todo_title(ctx context.Context, field g
 	return fc, nil
 }
 
-func (ec *executionContext) _Todo_discription(ctx context.Context, field graphql.CollectedField, obj *model.Todo) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Todo_discription(ctx, field)
+func (ec *executionContext) _Todo_description(ctx context.Context, field graphql.CollectedField, obj *model.Todo) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Todo_description(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1093,7 +1093,7 @@ func (ec *executionContext) _Todo_discription(ctx context.Context, field graphql
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Discription, nil
+		return obj.Description, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1107,7 +1107,7 @@ func (ec *executionContext) _Todo_discription(ctx context.Context, field graphql
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Todo_discription(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Todo_description(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Todo",
 		Field:      field,
@@ -3117,7 +3117,7 @@ func (ec *executionContext) unmarshalInputTodoInput(ctx context.Context, obj int
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"title", "discription", "image"}
+	fieldsInOrder := [...]string{"title", "description", "image"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -3131,13 +3131,13 @@ func (ec *executionContext) unmarshalInputTodoInput(ctx context.Context, obj int
 				return it, err
 			}
 			it.Title = data
-		case "discription":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("discription"))
+		case "description":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Discription = data
+			it.Description = data
 		case "image":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("image"))
 			data, err := ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, v)
@@ -3322,8 +3322,8 @@ func (ec *executionContext) _Todo(ctx context.Context, sel ast.SelectionSet, obj
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "discription":
-			out.Values[i] = ec._Todo_discription(ctx, field, obj)
+		case "description":
+			out.Values[i] = ec._Todo_description(ctx, field, obj)
 		case "image":
 			out.Values[i] = ec._Todo_image(ctx, field, obj)
 		case "created_at":

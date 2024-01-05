@@ -15,7 +15,7 @@ type Query struct {
 type Todo struct {
 	TodoID      string          `json:"todo_id"`
 	Title       string          `json:"title"`
-	Discription *string         `json:"discription,omitempty"`
+	Description *string         `json:"description,omitempty"`
 	Image       *graphql.Upload `json:"image,omitempty"`
 	CreatedAt   string          `json:"created_at"`
 	UpdatedAt   string          `json:"updated_at"`
@@ -25,6 +25,6 @@ type Todo struct {
 
 type TodoInput struct {
 	Title       string          `json:"title"`
-	Discription *string         `json:"discription,omitempty"`
+	Description *string         `json:"description,omitempty"`
 	Image       *graphql.Upload `json:"image,omitempty"`
 }

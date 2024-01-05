@@ -3,7 +3,7 @@ scalar Upload
 type Todo {
   todo_id: ID!
   title: String!
-  discription: String
+  description: String
   image: Upload
   created_at: String!
   updated_at: String!
@@ -13,7 +13,7 @@ type Todo {
 
 input TodoInput {
   title: String!
-  discription: String
+  description: String
   image: Upload
 }
 
