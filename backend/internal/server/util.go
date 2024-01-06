@@ -9,6 +9,8 @@ import (
 	"time"
 
 	"github.com/murasame29/gql-todo-app/cmd/config"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 const (
@@ -57,4 +59,21 @@ func runWithGracefulShutdown(handler http.Handler) {
 	if err := srv.Shutdown(ctx); err != nil {
 		panic("server shutdown error : " + err.Error())
 	}
+}
+
+func GormConnect() *gorm.DB {
+	// gorm connect
+	dsn := fmt.Sprintf(
+		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable timezone=Asia/Tokyo",
+		"localhost",
+		"5432",
+		"postgres",
+		"postgres",
+		"todos",
+	)
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		panic("gorm open error : " + err.Error())
+	}
+	return db
 }

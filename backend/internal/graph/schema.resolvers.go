@@ -16,7 +16,7 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input model.TodoInput
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	res, err := r.todo.CreateTodo(ctx, &input)
+	res, err := r.Todo.CreateTodo(ctx, &input)
 	if err != nil {
 		return nil, err
 	}
@@ -28,7 +28,7 @@ func (r *mutationResolver) UpdateTodo(ctx context.Context, todoID int, input mod
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	res, err := r.todo.UpdateTodo(ctx, todoID, &input)
+	res, err := r.Todo.UpdateTodo(ctx, todoID, &input)
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +40,7 @@ func (r *mutationResolver) DeleteTodo(ctx context.Context, todoID int) (*model.T
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	res, err := r.todo.Delete(ctx, todoID)
+	res, err := r.Todo.Delete(ctx, todoID)
 	if err != nil {
 		return nil, err
 	}
@@ -52,7 +52,7 @@ func (r *queryResolver) GetTodos(ctx context.Context, solved *bool, pageSize *in
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	res, err := r.todo.GetTodos(ctx, solved, pageSize, pageID)
+	res, err := r.Todo.GetTodos(ctx, solved, pageSize, pageID)
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +64,7 @@ func (r *queryResolver) GetTodoByID(ctx context.Context, todoID int) (*model.Tod
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	res, err := r.todo.GetTodoByID(ctx, todoID)
+	res, err := r.Todo.GetTodoByID(ctx, todoID)
 	if err != nil {
 		return nil, err
 	}
