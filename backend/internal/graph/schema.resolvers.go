@@ -6,34 +6,69 @@ package graph
 
 import (
 	"context"
-	"fmt"
+	"time"
 
 	"github.com/murasame29/gql-todo-app/internal/graph/model"
 )
 
 // CreateTodo is the resolver for the createTodo field.
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.TodoInput) (*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: CreateTodo - createTodo"))
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	res, err := r.todo.CreateTodo(ctx, &input)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
 
 // UpdateTodo is the resolver for the updateTodo field.
-func (r *mutationResolver) UpdateTodo(ctx context.Context, todoID string, input model.TodoInput) (*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: UpdateTodo - updateTodo"))
+func (r *mutationResolver) UpdateTodo(ctx context.Context, todoID int, input model.TodoUpdateInput) (*model.Todo, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	res, err := r.todo.UpdateTodo(ctx, todoID, &input)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
 
 // DeleteTodo is the resolver for the deleteTodo field.
-func (r *mutationResolver) DeleteTodo(ctx context.Context, todoID string) (*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: DeleteTodo - deleteTodo"))
+func (r *mutationResolver) DeleteTodo(ctx context.Context, todoID int) (*model.Todo, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	res, err := r.todo.Delete(ctx, todoID)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
 
 // GetTodos is the resolver for the getTodos field.
 func (r *queryResolver) GetTodos(ctx context.Context, solved *bool, pageSize *int, pageID *int) ([]*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: GetTodos - getTodos"))
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	res, err := r.todo.GetTodos(ctx, solved, pageSize, pageID)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
 
 // GetTodoByID is the resolver for the getTodoById field.
-func (r *queryResolver) GetTodoByID(ctx context.Context, todoID string) (*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: GetTodoByID - getTodoById"))
+func (r *queryResolver) GetTodoByID(ctx context.Context, todoID int) (*model.Todo, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	res, err := r.todo.GetTodoByID(ctx, todoID)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
 
 // Mutation returns MutationResolver implementation.

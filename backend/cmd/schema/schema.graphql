@@ -1,10 +1,10 @@
 scalar Upload
 
 type Todo {
-  todo_id: ID!
+  todo_id: Int!
   title: String!
-  discription: String
-  image: Upload
+  description: String
+  image: String
   created_at: String!
   updated_at: String!
   is_solved: Boolean!
@@ -13,17 +13,24 @@ type Todo {
 
 input TodoInput {
   title: String!
-  discription: String
+  description: String
   image: Upload
+}
+
+input TodoUpdateInput {
+  title: String!
+  description: String
+  image: Upload
+  is_solved: Boolean
 }
 
 type Query {
   getTodos(solved: Boolean, page_size: Int, page_id: Int): [Todo]
-  getTodoById(todo_id: ID!): Todo
+  getTodoById(todo_id: Int!): Todo
 }
 
 type Mutation {
   createTodo(input: TodoInput!): Todo
-  updateTodo(todo_id: ID!, input: TodoInput!): Todo
-  deleteTodo(todo_id: ID!): Todo
+  updateTodo(todo_id: Int!, input: TodoUpdateInput!): Todo
+  deleteTodo(todo_id: Int!): Todo
 }
