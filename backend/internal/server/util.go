@@ -65,11 +65,11 @@ func GormConnect() *gorm.DB {
 	// gorm connect
 	dsn := fmt.Sprintf(
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable timezone=Asia/Tokyo",
-		"localhost",
+		"database",
 		"5432",
 		"postgres",
 		"postgres",
-		"todos",
+		"postgres",
 	)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
