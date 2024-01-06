@@ -162,11 +162,13 @@ func (t *todoService) UpdateTodo(ctx context.Context, todoID int, arg *model.Tod
 		Title:       arg.Title,
 		Description: *arg.Description,
 		Image:       image,
+		CreatedAt:   oldTodo.CreatedAt,
 		UpdatedAt:   time.Now(),
 		IsSolved:    *arg.IsSolved,
 	})
 
 	return &model.Todo{
+		TodoID:      todoID,
 		Title:       arg.Title,
 		Description: arg.Description,
 		Image:       &image,
@@ -182,8 +184,18 @@ func (t *todoService) Delete(ctx context.Context, todoID int) (*model.Todo, erro
 	if err != nil {
 		return nil, err
 	}
-	err = t.repo.Delete(todoID)
+	err = t.repo.Update(&models.Todo{
+		TodoID:      todo.TodoID,
+		Title:       todo.Title,
+		Description: todo.Description,
+		Image:       todo.Image,
+		CreatedAt:   todo.CreatedAt,
+		UpdatedAt:   todo.UpdatedAt,
+		IsSolved:    todo.IsSolved,
+		IsDeleted:   true,
+	})
 	return &model.Todo{
+		TodoID:      todo.TodoID,
 		Title:       todo.Title,
 		Description: &todo.Description,
 		Image:       &todo.Image,

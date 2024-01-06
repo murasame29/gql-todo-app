@@ -3,7 +3,7 @@ package models
 import "time"
 
 type Todo struct {
-	TodoID      int       `json:"todo_id" `
+	TodoID      int       `json:"todo_id" gorm:"primaryKey;autoIncrement"`
 	Title       string    `json:"title"`
 	Description string    `json:"description"`
 	Image       string    `json:"image"`
