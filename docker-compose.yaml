@@ -28,22 +28,22 @@ services:
       - gql-todo-app-network
 
   # TODO:フロントエンドのコンテナを追加する
-  frontend:
-    build: ./frontend
-    ports:
-      - "3000:3000"
-    environment:
-    # TODO:フロントエンドの環境変数を設定する
-      - REACT_APP_API_URL=http://localhost:8080/graphql
-    volumes:
-    # TODO:フロントエンドのコンテナにマウントする
-      - ./frontend/src:/app/src
-      - ./frontend/public:/app/public
-    networks:
-      - gql-todo-app-network
-    depends_on:
-      - backend
-      - database
+  # frontend:
+  #   build: ./frontend
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #   # TODO:フロントエンドの環境変数を設定する
+  #     - REACT_APP_API_URL=http://localhost:8080/graphql
+  #   volumes:
+  #   # TODO:フロントエンドのコンテナにマウントする
+  #     - ./frontend/src:/app/src
+  #     - ./frontend/public:/app/public
+  #   networks:
+  #     - gql-todo-app-network
+  #   depends_on:
+  #     - backend
+  #     - database
       
 networks:
   gql-todo-app-network:

@@ -6,7 +6,10 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/murasame29/gql-todo-app/internal/graph"
+	"github.com/murasame29/gql-todo-app/internal/repository/gorm"
 	"github.com/murasame29/gql-todo-app/internal/router/middleware"
+	"github.com/murasame29/gql-todo-app/internal/server"
+	"github.com/murasame29/gql-todo-app/internal/service/todo"
 
 	"github.com/labstack/echo/v4"
 )
@@ -28,14 +31,17 @@ func NewEcho() http.Handler {
 	router.engine.Use(router.middleware.SetCORS())
 	router.SystemAPI()
 	router.pgRoute()
-
 	{
 		router.v1 = router.engine.Group("/v1")
-		router.v1.GET("/query",
+		router.v1.POST("/query",
 			echo.WrapHandler(
 				handler.NewDefaultServer(
 					graph.NewExecutableSchema(
-						graph.Config{Resolvers: &graph.Resolver{}},
+						graph.Config{Resolvers: &graph.Resolver{
+							Todo: todo.NewTodoService(
+								gorm.NewTodoRepository(server.GormConnect()),
+							),
+						}},
 					),
 				),
 			),

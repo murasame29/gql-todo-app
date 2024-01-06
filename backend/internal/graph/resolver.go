@@ -8,5 +8,11 @@ import (
 )
 
 type Resolver struct {
-	todo todo.TodoService
+	Todo todo.TodoService
+}
+
+func NewResolver(todo todo.TodoService) *Resolver {
+	return &Resolver{
+		Todo: todo,
+	}
 }
