@@ -33,7 +33,7 @@ func NewEcho() http.Handler {
 	router.pgRoute()
 	{
 		router.v1 = router.engine.Group("/v1")
-		router.v1.GET("/query",
+		router.v1.POST("/query",
 			echo.WrapHandler(
 				handler.NewDefaultServer(
 					graph.NewExecutableSchema(
