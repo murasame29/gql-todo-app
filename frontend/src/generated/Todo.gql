@@ -1,0 +1,49 @@
+query GetTodos($solved: Boolean, $page_size: Int, $page_id: Int) {
+  getTodos(solved: $solved, page_size: $page_size, page_id: $page_id) {
+    todo_id
+    title
+    description
+    image
+    is_solved
+  }
+}
+
+query GetTodoById($todo_id: Int!) {
+  getTodoById(todo_id: $todo_id) {
+    todo_id
+    title
+    description
+    image
+    is_solved
+  }
+}
+
+mutation CreateTodo($input: TodoInput!) {
+  createTodo(input: $input) {
+    todo_id
+    title
+    description
+    image
+    is_solved
+  }
+}
+
+mutation UpdateTodo($todo_id: Int!, $input: TodoUpdateInput!) {
+  updateTodo(todo_id: $todo_id, input: $input) {
+    todo_id
+    title
+    description
+    image
+    is_solved
+  }
+}
+
+mutation DeleteTodo($todo_id: Int!) {
+  deleteTodo(todo_id: $todo_id) {
+    todo_id
+    title
+    description
+    image
+    is_solved
+  }
+}
